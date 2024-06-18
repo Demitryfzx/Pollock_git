@@ -26,6 +26,10 @@ def future_data():
 def future_data_insert(db_name, 
                        collection_name, 
                        mongo_uri):
+    '''
+    This function is to transform datetime.date to datetime.datetime, 
+    and finally add the data to the required MongoDB storage
+    '''
     future_dates = future_data()
     
     df = future_dates

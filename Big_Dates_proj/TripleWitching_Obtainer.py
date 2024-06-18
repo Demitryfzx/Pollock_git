@@ -18,7 +18,10 @@ def get_triple_witching_days(start_year, end_year):
 def add_triple_witching(db_name, 
                        collection_name, 
                        mongo_uri):
-    
+    '''
+    This function will obtain all the triple witching days from 
+    4-year before now to 4-year afterwards.
+    '''
     today = date.today()
     start_year = today.year - 4
     end_year = today.year + 4

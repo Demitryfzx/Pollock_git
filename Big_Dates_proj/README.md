@@ -78,6 +78,32 @@ Successful Insertion
 - `obtain_single_historical_output(ticker)`: Fetches historical release output for a single ticker.
 - `obtain_all_historical_output()`: Fetches historical release output for all tickers.
 
+### MongoDB data format (example)
+data = {
+    "date": datetime(2024, 6, 14),
+    "instrument_code": "BOJDTR Index",
+    "description": "BOJ rate release",
+    "timezone": "Japan"
+}
+
+
+## Policy_Rate_Obtainer
+This script consists of two main functions that work together to fetch future policy rate release data and store it in a MongoDB collection. The script is designed to run daily. It is based on the Big_Date_API mentioned above
+
+#### `future_data()`
+
+- **Purpose**: Fetches future policy rate release dates from the `Big_Date_API` and verifies the validity of the data.
+- **Returns**: A Pandas DataFrame containing valid future policy rate release dates with columns: `ticker`, `date`, `country`, `description`, `timezone`.
+
+#### `future_data_insert(db_name, collection_name, mongo_uri)`
+
+- **Purpose**: Transforms the `date` field from `datetime.date` to `datetime.datetime`, deletes existing records in MongoDB where the date is after today, and inserts new valid records.
+- **Parameters**:
+  - `db_name` (str): The name of the MongoDB database.
+  - `collection_name` (str): The name of the MongoDB collection.
+  - `mongo_uri` (str): The MongoDB connection URI.
+
+## 
 
 
 

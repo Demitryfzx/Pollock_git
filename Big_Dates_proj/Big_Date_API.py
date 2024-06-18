@@ -179,6 +179,9 @@ def retrive_single_futureversion(index_name: str,
         return None
 
 def obtain_single_future_output(ticker):
+    '''
+    This function is to standardize the output towards MongoDB
+    '''
     index_name = ticker_to_index(ticker)
     release_date = retrive_single_futureversion(index_name, checker = False)
     timezone = obtain_timezone(index_name)
@@ -192,6 +195,9 @@ def obtain_single_future_output(ticker):
             "timezone": timezone}
 
 def obtain_all_future_output():
+    '''
+    This function tends to obtain all future information concurrently
+    '''
     future_dates = dict()
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(obtain_single_future_output, ticker): 
@@ -256,6 +262,9 @@ def retrive_single_historicalversion(index_name: str,
         return None
 
 def obtain_single_historical_output(ticker):
+    '''
+    This function is to standardize the output towards MongoDB
+    '''
     index_name = ticker_to_index(ticker)
     release_date = retrive_single_historicalversion(index_name, checker = False)
     timezone = obtain_timezone(index_name)
@@ -273,6 +282,9 @@ def obtain_single_historical_output(ticker):
     return to_return
 
 def obtain_all_historical_output():
+    '''
+    This function tends to obtain all future information concurrently
+    '''
     historical_dates = dict()
     with concurrent.futures.ThreadPoolExecutor() as executor:
         histories = {executor.submit(obtain_single_historical_output, ticker): 

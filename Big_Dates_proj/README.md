@@ -103,7 +103,19 @@ This script consists of two main functions that work together to fetch future po
   - `collection_name` (str): The name of the MongoDB collection.
   - `mongo_uri` (str): The MongoDB connection URI.
 
-## 
+## Triple Witching Obtainer
+This function simply obtain triple witching dates and store them in a MongoDB collection.
 
+#### `get_triple_witching_days(start_year, end_year)`
+
+- **Purpose**: Calculates the triple witching days for each year in the given range.
+- **Parameters**:
+  - `start_year` (int): The starting year for the calculation.
+  - `end_year` (int): The ending year for the calculation.
+- **Returns**: A list of pandas.Timestamp objects representing the triple witching days.
+
+#### `add_triple_witching(db_name, collection_name, mongo_uri)`
+
+- **Purpose**: Fetches the triple witching days and inserts them into a MongoDB collection.
 
 

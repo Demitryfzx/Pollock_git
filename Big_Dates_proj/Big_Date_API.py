@@ -95,6 +95,28 @@ TICKER_TO_COUNTRY = {
     'VNREFINC': 'Vietnam'
 }
 
+COUNTRY_TO_RELEASETIME = {
+    'Taiwan': (16, 30),
+    'United States': (14, 0),
+    'Australia': (14, 30),
+    'Brazil': (18, 30),
+    'Norway': (10, 0),
+    'Switzerland': (9, 30),
+    'United Kingdom': (12, 0),
+    'Philippines': (15, 0),
+    'Sweden': (9, 30),
+    'Turkey': (14, 0),
+    'Israel': (18, 0),
+    'New Zealand': (14, 0),
+    'Malaysia': (15, 0),
+    'South Korea': (10, 0),
+    'South Africa': (15, 0),
+    'Canada': (10, 0),
+    'Russia': (13, 30),
+    'India': (10, 0),
+    'Hong Kong': (8, 0)
+}
+
 def ticker_to_index(ticker):
     return f"{ticker} Index"
 
@@ -179,9 +201,6 @@ def retrive_single_futureversion(index_name: str,
         return None
 
 def obtain_single_future_output(ticker):
-    '''
-    This function is to standardize the output towards MongoDB
-    '''
     index_name = ticker_to_index(ticker)
     release_date = retrive_single_futureversion(index_name, checker = False)
     timezone = obtain_timezone(index_name)
@@ -195,9 +214,6 @@ def obtain_single_future_output(ticker):
             "timezone": timezone}
 
 def obtain_all_future_output():
-    '''
-    This function tends to obtain all future information concurrently
-    '''
     future_dates = dict()
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = {executor.submit(obtain_single_future_output, ticker): 
@@ -241,7 +257,7 @@ def retrive_single_historicalversion(index_name: str,
             'endDate': previous_date,
             'periodicitySelection': "DAILY"
         })
-        data = session.sendRequest([{'request': rqst}])
+        data = session.sendRequest([{'request': rqst}]) 
             
         for event in data:   
             for message in event:
@@ -262,9 +278,6 @@ def retrive_single_historicalversion(index_name: str,
         return None
 
 def obtain_single_historical_output(ticker):
-    '''
-    This function is to standardize the output towards MongoDB
-    '''
     index_name = ticker_to_index(ticker)
     release_date = retrive_single_historicalversion(index_name, checker = False)
     timezone = obtain_timezone(index_name)
@@ -282,9 +295,6 @@ def obtain_single_historical_output(ticker):
     return to_return
 
 def obtain_all_historical_output():
-    '''
-    This function tends to obtain all future information concurrently
-    '''
     historical_dates = dict()
     with concurrent.futures.ThreadPoolExecutor() as executor:
         histories = {executor.submit(obtain_single_historical_output, ticker): 

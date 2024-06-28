@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from datetime import datetime
 import pandas as pd
 from Big_Date_API import *
+import re
 
 def future_data():
     future_dates = obtain_all_future_output()
@@ -26,10 +27,6 @@ def future_data():
 def future_data_insert(db_name, 
                        collection_name, 
                        mongo_uri):
-    '''
-    This function is to transform datetime.date to datetime.datetime, 
-    and finally add the data to the required MongoDB storage
-    '''
     future_dates = future_data()
     
     df = future_dates
@@ -41,10 +38,15 @@ def future_data_insert(db_name,
     
     df['date'] = df['date'].apply(lambda x: datetime.datetime.combine(x, datetime.datetime.min.time()) if isinstance(x, datetime.date) else x)
     
+    for idx, row in df.iterrows():
+        country = row['country']
+        if (country in (COUNTRY_TO_RELEASETIME.keys())):
+            hour, minute = COUNTRY_TO_RELEASETIME[country][0], COUNTRY_TO_RELEASETIME[country][1]
+            df.loc[idx, 'date'] = df.loc[idx, 'date'] + pd.Timedelta(hours = hour, minutes = minute)
+
     client = MongoClient(mongo_uri)
     db = client[db_name]
     collection = db[collection_name]
-    
 
     # Delete records where date is after today
     today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
